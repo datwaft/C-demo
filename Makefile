@@ -11,12 +11,12 @@ TEST_BIN=$(TEST)/bin
 
 # Targets
 BINS=$(BIN)/main
-TEST_BINS=$(patsubst $(TEST)/%.c,$(TEST_BIN)/%,$(TESTS))
+TEST_BINS=$(patsubst $(TEST)/%.c, $(TEST_BIN)/%, $(TESTS))
 
 # Files
-BIN_OBJS=$(patsubst $(BIN)/%,$(OBJ)/%.o,$(BINS))
+BIN_OBJS=$(patsubst $(BIN)/%, $(OBJ)/%.o, $(BINS))
 SRCS=$(wildcard $(SRC)/*.c)
-OBJS=$(filter-out $(BIN_OBJS),$(patsubst $(SRC)/%.c,$(OBJ)/%.o,$(SRCS)))
+OBJS=$(filter-out $(BIN_OBJS), $(patsubst $(SRC)/%.c, $(OBJ)/%.o, $(SRCS)))
 TESTS=$(wildcard $(TEST)/*.c)
 
 # Compilation rules
