@@ -12,16 +12,16 @@ SRCS=$(wildcard $(SRC)/*.c)
 OBJS=$(patsubst $(SRC)/%.c, $(OBJ)/%.o, $(SRCS))
 
 # Targets
-TARGET=$(BIN)/hello
+BINS=$(BIN)/hello
 
 # Compilation rules
-all: $(TARGET)
+all: $(BINS)
 
 release: CFLAGS=-Wall -O2 -DNDEBUG
-release: $(TARGET)
+release: $(BINS)
 
-$(TARGET): $(OBJS) | $(BIN)
-	$(CC) $(CFLAGS) $(OBJS) -o $(TARGET)
+$(BINS): $(OBJS) | $(BIN)
+	$(CC) $(CFLAGS) $< -o $@
 
 $(OBJ)/%.o: $(SRC)/%.c | $(OBJ)
 	$(CC) $(CFLAGS) -c $< -o $@
