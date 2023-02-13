@@ -30,8 +30,13 @@ $(BIN)/%: $(OBJ)/%.o $(OBJS) | $(BIN)
 $(TEST_BIN)/%: $(TEST)/%.c $(OBJS) | $(TEST_BIN)
 	$(CC) $(CFLAGS) $^ -o $@ -lcriterion
 
+# For files with .h counterpart
+$(OBJ)/%.o: $(SRC)/%.c $(SRC)/%.h | $(OBJ)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+# For files without .h counterpart
 $(OBJ)/%.o: $(SRC)/%.c | $(OBJ)
-	$(CC) $(CFLAGS) -c $^ -o $@
+	$(CC) $(CFLAGS) -c $< -o $@
 
 # Create folders if they don't exist
 $(OBJ):
