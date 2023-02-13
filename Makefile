@@ -12,12 +12,12 @@ TEST_BIN=$(TEST)/bin
 # Files
 MAIN=$(OBJ)/hello.o
 SRCS=$(wildcard $(SRC)/*.c)
-OBJS=$(filter-out $(MAIN), $(patsubst $(SRC)/%.c, $(OBJ)/%.o, $(SRCS)))
+OBJS=$(filter-out $(MAIN), $(patsubst $(SRC)/%.c,$(OBJ)/%.o,$(SRCS)))
 TESTS=$(wildcard $(TEST)/*.c)
 
 # Targets
 BINS=$(BIN)/hello
-TEST_BINS=$(patsubst $(TEST)/%.c, $(TEST_BIN)/%, $(TESTS))
+TEST_BINS=$(patsubst $(TEST)/%.c,$(TEST_BIN)/%,$(TESTS))
 
 # Compilation rules
 all: $(BINS)
@@ -48,7 +48,7 @@ $(TEST_BIN):
 .PHONY: clean test
 
 test: $(TEST_BINS)
-	for test in $(TEST_BINS); do ./$$test; done
+	for test_file in $(TEST_BINS); do ./$$test_file; done
 
 clean:
 	rm -rf $(OBJ)
