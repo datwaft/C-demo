@@ -6,3 +6,9 @@ obj/
 bin/
 # TEST_BIN
 test/bin/
+
+# Clangd cache
+.cache/
+
+# Personal LSP configuration
+compile_commands.json
