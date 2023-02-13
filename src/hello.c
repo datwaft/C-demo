@@ -1,3 +1,4 @@
+#include "foo.h"
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -16,6 +17,10 @@ int main() {
            style, color, c);
   }
   putchar('\n');
+  putchar('\n');
+
+  int x = foo(3);
+  printf("%d\n", x);
 
   return 0;
 }

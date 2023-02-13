@@ -21,7 +21,7 @@ release: CFLAGS=-Wall -O2 -DNDEBUG
 release: $(BINS)
 
 $(BINS): $(OBJS) | $(BIN)
-	$(CC) $(CFLAGS) $< -o $@
+	$(CC) $(CFLAGS) $(OBJS) -o $@
 
 $(OBJ)/%.o: $(SRC)/%.c | $(OBJ)
 	$(CC) $(CFLAGS) -c $< -o $@
