@@ -1,6 +1,6 @@
 # Compilation
 CC=clang
-CFLAGS=-g -Wall
+CFLAGS=-g -Wall -std=c11
 
 # Folders
 SRC=src
