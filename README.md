@@ -1,5 +1,12 @@
-To compile using clang use:
+To execute the targets execute:
 
 ```sh
-clang hello.c -o hello
+make
+./bin/hello
+```
+
+To execute unit tests execute:
+
+```sh
+make test
 ```
