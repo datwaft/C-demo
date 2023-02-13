@@ -20,19 +20,21 @@ OBJS=$(filter-out $(MAIN),$(patsubst $(SRC)/%.c,$(OBJ)/%.o,$(SRCS)))
 TESTS=$(wildcard $(TEST)/*.c)
 
 # Compilation rules
+.SECONDARY: $(OBJS) $(MAIN)
+
 all: $(BINS)
 
 release: CFLAGS=-Wall -O2 -DNDEBUG
 release: $(BINS)
 
-$(BINS): $(OBJS) $(MAIN) | $(BIN)
+$(BIN)/%: $(OBJ)/%.o $(OBJS) | $(BIN)
 	$(CC) $(CFLAGS) $^ -o $@
 
 $(TEST_BIN)/%: $(TEST)/%.c $(OBJS) | $(TEST_BIN)
 	$(CC) $(CFLAGS) $^ -o $@ -lcriterion
 
 $(OBJ)/%.o: $(SRC)/%.c | $(OBJ)
-	$(CC) $(CFLAGS) -c $< -o $@
+	$(CC) $(CFLAGS) -c $^ -o $@
 
 # Create folders if they don't exist
 $(OBJ):
