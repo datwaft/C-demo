@@ -10,13 +10,13 @@ TEST=test
 TEST_BIN=$(TEST)/bin
 
 # Files
-MAIN=$(OBJ)/hello.o
+MAIN=$(OBJ)/main.o
 SRCS=$(wildcard $(SRC)/*.c)
 OBJS=$(filter-out $(MAIN),$(patsubst $(SRC)/%.c,$(OBJ)/%.o,$(SRCS)))
 TESTS=$(wildcard $(TEST)/*.c)
 
 # Targets
-BINS=$(BIN)/hello
+BINS=$(BIN)/main
 TEST_BINS=$(patsubst $(TEST)/%.c,$(TEST_BIN)/%,$(TESTS))
 
 # Compilation rules
