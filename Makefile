@@ -6,13 +6,18 @@ CFLAGS=-g -Wall
 SRC=src
 OBJ=obj
 BIN=bin
+TEST=test
+TEST_BIN=$(TEST)/bin
 
 # Files
+MAIN=$(OBJ)/hello.o
 SRCS=$(wildcard $(SRC)/*.c)
-OBJS=$(patsubst $(SRC)/%.c, $(OBJ)/%.o, $(SRCS))
+OBJS=$(filter-out $(MAIN), $(patsubst $(SRC)/%.c, $(OBJ)/%.o, $(SRCS)))
+TESTS=$(wildcard $(TEST)/*.c)
 
 # Targets
 BINS=$(BIN)/hello
+TEST_BINS=$(patsubst $(TEST)/%.c, $(TEST_BIN)/%, $(TESTS))
 
 # Compilation rules
 all: $(BINS)
@@ -20,8 +25,11 @@ all: $(BINS)
 release: CFLAGS=-Wall -O2 -DNDEBUG
 release: $(BINS)
 
-$(BINS): $(OBJS) | $(BIN)
-	$(CC) $(CFLAGS) $(OBJS) -o $@
+$(BINS): $(OBJS) $(MAIN) | $(BIN)
+	$(CC) $(CFLAGS) $(OBJS) $(MAIN) -o $@
+
+$(TEST_BIN)/%: $(TEST)/%.c $(OBJS) | $(TEST_BIN)
+	$(CC) $(CFLAGS) $< $(OBJS) -o $@ -lcriterion
 
 $(OBJ)/%.o: $(SRC)/%.c | $(OBJ)
 	$(CC) $(CFLAGS) -c $< -o $@
@@ -33,9 +41,16 @@ $(OBJ):
 $(BIN):
 	mkdir $@
 
+$(TEST_BIN):
+	mkdir $@
+
 # Pseudo-targets
-.PHONY: clean
+.PHONY: clean test
+
+test: $(TEST_BINS)
+	for test in $(TEST_BINS); do ./$$test; done
 
 clean:
 	rm -rf $(OBJ)
 	rm -rf $(BIN)
+	rm -rf $(TEST_BIN)

@@ -4,3 +4,5 @@ hello
 obj/
 # BIN
 bin/
+# TEST_BIN
+test/bin/
