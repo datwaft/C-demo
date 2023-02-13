@@ -1,15 +1,20 @@
+# Compilation
 CC=clang
 CFLAGS=-g -Wall
 
+# Folders
 SRC=src
 OBJ=obj
 BIN=bin
 
+# Files
 SRCS=$(wildcard $(SRC)/*.c)
 OBJS=$(patsubst $(SRC)/%.c, $(OBJ)/%.o, $(SRCS))
 
+# Targets
 TARGET=$(BIN)/hello
 
+# Compilation rules
 all: $(TARGET)
 
 $(TARGET): $(OBJS) | $(BIN)
