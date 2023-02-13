@@ -24,9 +24,6 @@ TESTS=$(wildcard $(TEST)/*.c)
 
 all: $(BINS)
 
-release: CFLAGS=-Wall -O2 -DNDEBUG
-release: $(BINS)
-
 $(BIN)/%: $(OBJ)/%.o $(OBJS) | $(BIN)
 	$(CC) $(CFLAGS) $^ -o $@
 
