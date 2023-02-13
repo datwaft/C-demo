@@ -24,3 +24,10 @@ $(OBJ):
 
 $(BIN):
 	mkdir $(BIN)
+
+# Pseudo-targets
+.PHONY: clean
+
+clean:
+	rm -rf $(OBJ)
+	rm -rf $(BIN)
