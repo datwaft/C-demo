@@ -37,5 +37,5 @@ $(BIN):
 .PHONY: clean
 
 clean:
-	rm -r $(OBJ)
-	rm -r $(BIN)
+	rm -rf $(OBJ)
+	rm -rf $(BIN)
