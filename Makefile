@@ -12,7 +12,7 @@ TEST_BIN=$(TEST)/bin
 # Files
 MAIN=$(OBJ)/hello.o
 SRCS=$(wildcard $(SRC)/*.c)
-OBJS=$(filter-out $(MAIN), $(patsubst $(SRC)/%.c,$(OBJ)/%.o,$(SRCS)))
+OBJS=$(filter-out $(MAIN),$(patsubst $(SRC)/%.c,$(OBJ)/%.o,$(SRCS)))
 TESTS=$(wildcard $(TEST)/*.c)
 
 # Targets
