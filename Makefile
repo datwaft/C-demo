@@ -11,8 +11,11 @@ TARGET=hello
 
 all: $(TARGET)
 
-main: $(OBJS)
+$(TARGET): $(OBJS)
 	$(CC) $(CFLAGS) $(OBJS) -o $(TARGET)
 
-%.o: %.c
+$(OBJ)/%.o: $(SRC)/%.c | $(OBJ)
 	$(CC) $(CFLAGS) -c $< -o $@
+
+$(OBJ):
+	mkdir $(OBJ)
