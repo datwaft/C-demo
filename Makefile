@@ -1,7 +1,18 @@
-CC = clang
-CFLAGS = -Wall
-LFLAGS =
-TARGET = hello
+CC=clang
+CFLAGS=-g -Wall
+
+SRC=src
+OBJ=obj
+
+SRCS=$(wildcard $(SRC)/*.c)
+OBJS=$(patsubst $(SRC)/%.c, $(OBJ)/%.o, $(SRCS))
+
+TARGET=hello
 
 all: $(TARGET)
-	$(CC) $(CFLAGS) -o $(TARGET) $(TARGET).c $(LFLAGS)
+
+main: $(OBJS)
+	$(CC) $(CFLAGS) $(OBJS) -o $(TARGET)
+
+%.o: %.c
+	$(CC) $(CFLAGS) -c $< -o $@
