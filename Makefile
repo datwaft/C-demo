@@ -17,6 +17,9 @@ TARGET=$(BIN)/hello
 # Compilation rules
 all: $(TARGET)
 
+release: CFLAGS=-Wall -O2 -DNDEBUG
+release: $(TARGET)
+
 $(TARGET): $(OBJS) | $(BIN)
 	$(CC) $(CFLAGS) $(OBJS) -o $(TARGET)
 
