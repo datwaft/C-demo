@@ -28,10 +28,10 @@ $(OBJ)/%.o: $(SRC)/%.c | $(OBJ)
 
 # Create folders if they don't exist
 $(OBJ):
-	mkdir $(OBJ)
+	mkdir $@
 
 $(BIN):
-	mkdir $(BIN)
+	mkdir $@
 
 # Pseudo-targets
 .PHONY: clean
