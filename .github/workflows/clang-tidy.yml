@@ -1,0 +1,16 @@
+name: clang-tidy
+on:
+  pull_request:
+  push:
+    branches:
+      - "main"
+
+jobs:
+  clang-format:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: KyleMayes/install-llvm-action@v1
+        with:
+          version: "15"
+      - run: clang-tidy {src,test}/**/*.c
