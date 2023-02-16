@@ -65,6 +65,7 @@ clean:
 
 install-hooks:
 	pre-commit install
+	pre-commit install --hook-type commit-msg
 
 run-hooks:
 	pre-commit run --all-files
