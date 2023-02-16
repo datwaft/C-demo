@@ -13,4 +13,6 @@ jobs:
       - uses: KyleMayes/install-llvm-action@v1
         with:
           version: "15"
-      - run: clang-tidy '{src,test}/**/*.c'
+      - run: sudo apt install bear
+      - run: bear -- make all test
+      - run: clang-tidy src/**/*.{c,h} test/**/*.c
