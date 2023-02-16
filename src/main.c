@@ -2,15 +2,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int main() {
-  srand(42);
-
+int main(int argc, char **argv) {
   for (int c = 'A'; c < 'A' + 26; c++) {
     // Colors
     // 31 = RED, 36 = CYAN
-    int color = rand() % (31 - 36 + 1) + 31;
+    u_int32_t color = arc4random_uniform(36 - 31 + 1) + 31;
     // Styles
-    int style = rand() % (7 + 1);
+    u_int32_t style = arc4random_uniform(7 + 1);
     printf("\x1b[%d;%dm"
            "%c"
            "\x1b[0m",
