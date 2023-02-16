@@ -17,4 +17,5 @@ jobs:
       - run: sudo apt-get -y install libcriterion-dev
       - run: bear -- make all test
       - run: sudo apt-get -y install clang-tidy
+      - run: ls -la
       - run: clang-tidy src/**/*.{c,h} test/**/*.c
