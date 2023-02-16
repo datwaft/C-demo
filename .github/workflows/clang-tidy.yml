@@ -13,8 +13,5 @@ jobs:
       - uses: egor-tensin/setup-clang@v1
         with:
           version: 15
-      - run: sudo apt-get -y install bear
-      - run: sudo apt-get -y install libcriterion-dev
-      - run: bear -- make all test
       - run: sudo apt-get -y install clang-tidy
       - run: make lint
