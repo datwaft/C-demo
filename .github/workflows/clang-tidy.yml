@@ -11,7 +11,9 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - run: sudo add-apt-repository "deb http://apt.llvm.org/bionic/ llvm-toolchain-bionic-15 main"
-      - run: sudo apt-get -y install bear libcriterion-dev
+      - run: sudo add-apt-repository "deb-src http://apt.llvm.org/bionic/ llvm-toolchain-bionic-15 main"
       - run: sudo apt-get -y install clang clang-tidy
+      - run: sudo apt-get -y install libcriterion-dev
+      - run: sudo apt-get -y install bear
       - run: bear -- make all test
       - run: make lint
