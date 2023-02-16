@@ -6,9 +6,9 @@ int main(int argc, char **argv) {
   for (int c = 'A'; c < 'A' + 26; c++) {
     // Colors
     // 31 = RED, 36 = CYAN
-    unsigned int color = arc4random_uniform(36 - 31 + 1) + 31;
+    int color = rand() % (36 - 31 + 1) + 31;
     // Styles
-    unsigned int style = arc4random_uniform(7 + 1);
+    int style = rand() % (7 + 1);
     printf("\x1b[%d;%dm"
            "%c"
            "\x1b[0m",
@@ -20,5 +20,5 @@ int main(int argc, char **argv) {
   int x = foo(3);
   printf("%d\n", x);
 
-  return 0;
+  exit(0);
 }
