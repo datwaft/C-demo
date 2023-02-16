@@ -2,8 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int main() {
-  srand(42);
+int main() { srand(42);
 
   for (int c = 'A'; c < 'A' + 26; c++) {
     // Colors
