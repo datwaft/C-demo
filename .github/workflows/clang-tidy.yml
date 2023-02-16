@@ -13,7 +13,7 @@ jobs:
       - uses: egor-tensin/setup-clang@v1
         with:
           version: 15
-      - run: sudo add-apt-repository "deb http://apt.llvm.org/bionic/ llvm-toolchain-bionic main"
+      - run: sudo add-apt-repository "deb http://apt.llvm.org/bionic/ llvm-toolchain-bionic-15 main"
       - run: sudo apt-get -y install bear libcriterion-dev
       - run: bear -- make all test
       - run: sudo apt-get -y install clang-tidy
