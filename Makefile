@@ -53,7 +53,7 @@ $(TEST_BIN):
 	mkdir $@
 
 # Pseudo-targets
-.PHONY: clean test
+.PHONY: test clean install-hooks run-hooks
 
 test: $(TEST_BINS)
 	for test_file in $^; do ./$$test_file; done
@@ -62,3 +62,9 @@ clean:
 	rm -rf $(OBJ)
 	rm -rf $(BIN)
 	rm -rf $(TEST_BIN)
+
+install-hooks:
+	pre-commit install
+
+run-hooks:
+	pre-commit run --all-files
