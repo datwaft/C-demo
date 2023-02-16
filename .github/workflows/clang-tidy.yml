@@ -13,5 +13,5 @@ jobs:
       - uses: egor-tensin/setup-clang@v1
         with:
           version: 15
-      - run: apt-get -y -qq install clang-tidy
+      - run: apt install clang-tidy
       - run: clang-tidy src/**/*.{c,h} test/**/*.c
