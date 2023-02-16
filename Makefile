@@ -53,7 +53,7 @@ $(TEST_BIN):
 	mkdir $@
 
 # Pseudo-targets
-.PHONY: test clean install-hooks run-hooks
+.PHONY: test clean install-hooks run-hooks lint
 
 test: $(TEST_BINS)
 	for test_file in $^; do ./$$test_file; done
@@ -69,3 +69,6 @@ install-hooks:
 
 run-hooks:
 	pre-commit run --all-files
+
+lint:
+	clang-tidy $(SRCS) $(patsubst $(OBJ)/%.o, $(SRC)/%.h, $(OBJS)) $(TESTS)
