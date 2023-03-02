@@ -26,7 +26,7 @@ TEST_SRCS := $(wildcard $(TEST_DIR)/*.c)
 # Byproduct variables
 # -------------------
 OBJS := $(SRCS:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
-DEPS := $(OBJS:.o=.d)
+DEPS := $(OBJS:.o=.d) $(TEST_SRCS:$(TEST_DIR)/%.c=$(TEST_BUILD_DIR)/%.d)
 
 .SECONDARY: $(OBJS) $(DEPS)
 
@@ -69,7 +69,7 @@ $(TEST_BUILD_DIR)/%: LDLIBS += -lcriterion
 $(TEST_BUILD_DIR)/%: $(TEST_DIR)/%.c $(OBJS) | $(TEST_BUILD_DIR)
 	$(CC) $(CFLAGS) $(CPPFLAGS) $(LDFLAGS) $(LDLIBS) $^ -o $@
 
-$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c $(MAKEFILE) | $(OBJ_DIR)
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c | $(OBJ_DIR)
 	$(CC) $(CFLAGS) $(CPPFLAGS) -c $< -o $@
 
 # =================
