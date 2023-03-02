@@ -2,7 +2,7 @@
 # Variable definition
 # ===================
 MAKEFILE := $(lastword $(MAKEFILE_LIST))
-README := README.md
+DOCUMENTATION := README.md CONTRIBUTING.md
 
 # ----------------
 # Folder variables
@@ -81,7 +81,7 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c | $(OBJ_DIR)
 # =================
 # Distribution rule
 # =================
-$(DIST): $(TARGET_SRC) $(SRCS) $(HEADERS) $(TEST_SRCS) $(MAKEFILE) $(README)
+$(DIST): $(TARGET_SRC) $(SRCS) $(HEADERS) $(TEST_SRCS) $(MAKEFILE) $(DOCUMENTATION)
 	tar -zcvf $@ $^
 
 # =====================
