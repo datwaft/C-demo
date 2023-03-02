@@ -1,67 +1,86 @@
-# Compilation
-CC=clang
-CFLAGS+= -Wall -Wextra -Wpedantic \
-         -Wformat=2 -Wno-unused-parameter -Wshadow \
-         -Wwrite-strings -Wstrict-prototypes -Wold-style-definition \
-         -Wredundant-decls -Wnested-externs -Wmissing-include-dirs
-CFLAGS+= -std=c11
+# ===================
+# Variable definition
+# ===================
 
-# Folders
-SRC=src
-OBJ=obj
-BIN=bin
-TEST=test
-TEST_BIN=$(TEST)/bin
+# ---------------------
+# Compilation variables
+# ---------------------
+CC := clang
+CFLAGS += -Wall -Wextra -Wpedantic \
+					-Wformat=2 -Wno-unused-parameter -Wshadow \
+					-Wwrite-strings -Wstrict-prototypes -Wold-style-definition \
+					-Wredundant-decls -Wnested-externs -Wmissing-include-dirs
+CFLAGS += -std=c11
 
-# Targets
-BINS=$(BIN)/main
-TEST_BINS=$(patsubst $(TEST)/%.c, $(TEST_BIN)/%, $(TESTS))
+# ----------------
+# Folder variables
+# ----------------
+SRC_DIR := src
+TEST_DIR := tests
 
-# Files
-BIN_OBJS=$(patsubst $(BIN)/%, $(OBJ)/%.o, $(BINS))
-SRCS=$(wildcard $(SRC)/*.c)
-OBJS=$(filter-out $(BIN_OBJS), $(patsubst $(SRC)/%.c, $(OBJ)/%.o, $(SRCS)))
-TESTS=$(wildcard $(TEST)/*.c)
+BUILD_DIR := build
+OBJ_DIR := $(BUILD_DIR)/obj
+TEST_BUILD_DIR := $(BUILD_DIR)/tests
 
+# ---------------------
+# Source file variables
+# ---------------------
+SRCS := $(wildcard $(SRC_DIR)/*.c)
+TEST_SRCS := $(wildcard $(TEST_DIR)/*.c)
+
+# -------------------
+# Byproduct variables
+# -------------------
+OBJS := $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SRCS))
+
+.SECONDARY: $(OBJS)
+
+# ----------------
+# Target variables
+# ----------------
+TARGET := $(BUILD_DIR)/main
+TEST_TARGETS := $(patsubst $(TEST_DIR)/%.c, $(TEST_BUILD_DIR)/%, $(TEST_SRCS))
+
+# =================
 # Compilation rules
-.SECONDARY: $(OBJS) $(BIN_OBJS)
+# =================
+all: $(TARGET)
 
-all: $(BINS)
-
-$(BIN)/%: $(OBJ)/%.o $(OBJS) | $(BIN)
+$(TARGET): $(OBJS) | $(BUILD_DIR)
 	$(CC) $(CFLAGS) $^ -o $@
 
-$(TEST_BIN)/%: $(TEST)/%.c $(OBJS) | $(TEST_BIN)
+$(TEST_BUILD_DIR)/%: $(TEST_DIR)/%.c $(OBJS) | $(TEST_BUILD_DIR)
 	$(CC) $(CFLAGS) $^ -o $@ -lcriterion
 
-# For files with .h counterpart
-$(OBJ)/%.o: $(SRC)/%.c $(SRC)/%.h | $(OBJ)
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c $(SRC_DIR)/%.h | $(OBJ_DIR)
 	$(CC) $(CFLAGS) -c $< -o $@
 
-# For files without .h counterpart
-$(OBJ)/%.o: $(SRC)/%.c | $(OBJ)
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c | $(OBJ_DIR)
 	$(CC) $(CFLAGS) -c $< -o $@
 
-# Create folders if they don't exist
-$(OBJ):
+# ---------------------
+# Folder creation rules
+# ---------------------
+$(BUILD_DIR):
 	mkdir $@
 
-$(BIN):
+$(OBJ_DIR): | $(BUILD_DIR)
 	mkdir $@
 
-$(TEST_BIN):
+$(TEST_BUILD_DIR): | $(BUILD_DIR)
 	mkdir $@
 
-# Pseudo-targets
+# ========================
+# Pseudo-target definition
+# ========================
+
 .PHONY: test clean install-hooks run-hooks lint
 
-test: $(TEST_BINS)
+test: $(TEST_TARGETS)
 	for test_file in $^; do ./$$test_file; done
 
 clean:
-	rm -rf $(OBJ)
-	rm -rf $(BIN)
-	rm -rf $(TEST_BIN)
+	rm -rf $(BUILD_DIR)
 
 install-hooks:
 	pre-commit install
@@ -71,4 +90,4 @@ run-hooks:
 	pre-commit run --all-files
 
 lint:
-	clang-tidy $(SRCS) $(patsubst $(OBJ)/%.o, $(SRC)/%.h, $(OBJS)) $(TESTS)
+	clang-tidy $(SRCS) $(TEST_SRCS)

@@ -1,11 +1,5 @@
-# TARGET
-hello
-# OBJ
-obj/
-# BIN
-bin/
-# TEST_BIN
-test/bin/
+# BUILD_DIR
+build/
 
 # Clangd cache
 .cache/
