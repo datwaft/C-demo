@@ -15,25 +15,31 @@ BUILD_DIR := build
 OBJ_DIR := $(BUILD_DIR)/obj
 TEST_BUILD_DIR := $(BUILD_DIR)/tests
 
+# ---------------
+# Target variable
+# ---------------
+TARGET := $(BUILD_DIR)/main
+
 # ---------------------
 # Source file variables
 # ---------------------
-SRCS := $(wildcard $(SRC_DIR)/*.c)
+TARGET_SRC := $(TARGET:$(BUILD_DIR)/%=$(SRC_DIR)/%.c)
+SRCS := $(filter-out $(TARGET_SRC), $(wildcard $(SRC_DIR)/*.c))
 HEADERS := $(wildcard $(HEADER_DIR)/*.h)
 TEST_SRCS := $(wildcard $(TEST_DIR)/*.c)
 
 # -------------------
 # Byproduct variables
 # -------------------
+TARGET_OBJ := $(TARGET:$(BUILD_DIR)/%=$(OBJ_DIR)/%.o)
 OBJS := $(SRCS:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 DEPS := $(OBJS:.o=.d) $(TEST_SRCS:$(TEST_DIR)/%.c=$(TEST_BUILD_DIR)/%.d)
 
-.SECONDARY: $(OBJS) $(DEPS)
+.SECONDARY: $(OBJS) $(TARGET_OBJ) $(DEPS)
 
-# ----------------
-# Target variables
-# ----------------
-TARGET := $(BUILD_DIR)/main
+# --------------
+# Test variables
+# --------------
 TEST_TARGETS := $(TEST_SRCS:$(TEST_DIR)/%.c=$(TEST_BUILD_DIR)/%)
 
 # ----------------------
@@ -62,7 +68,7 @@ all: $(TARGET)
 .PHONY: dist
 dist: $(DIST)
 
-$(TARGET): $(OBJS) | $(BUILD_DIR)
+$(TARGET): $(TARGET_OBJ) $(OBJS) | $(BUILD_DIR)
 	$(CC) $(CFLAGS) $(LDFLAGS) $(LDLIBS) $^ -o $@
 
 $(TEST_BUILD_DIR)/%: LDLIBS += -lcriterion
@@ -75,7 +81,7 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c | $(OBJ_DIR)
 # =================
 # Distribution rule
 # =================
-$(DIST): $(SRCS) $(HEADERS) $(TEST_SRCS) $(MAKEFILE) $(README)
+$(DIST): $(TARGET_SRC) $(SRCS) $(HEADERS) $(TEST_SRCS) $(MAKEFILE) $(README)
 	tar -zcvf $@ $^
 
 # =====================
