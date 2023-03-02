@@ -1,4 +1,4 @@
-#include "../src/foo.h"
+#include "foo.h"
 #include <criterion/criterion.h>
 
 Test(foo_tests, execution) {

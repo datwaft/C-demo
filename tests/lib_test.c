@@ -1,4 +1,4 @@
-#include "../src/lib.h"
+#include "lib.h"
 #include <criterion/criterion.h>
 
 Test(reverse, works_with_odd_string) {
