@@ -62,8 +62,9 @@ LDLIBS += -lm
 # =================
 # Compilation rules
 # =================
-.PHONY: all
+.PHONY: all all_tests
 all: $(TARGET)
+all_tests: $(TEST_TARGETS)
 
 .PHONY: dist
 dist: $(DIST)
@@ -122,7 +123,7 @@ run-hooks:
 
 .PHONY: lint
 lint:
-	clang-tidy $(SRCS) $(TEST_SRCS)
+	clang-tidy $(TARGET_SRC) $(SRCS) $(HEADERS) $(TEST_SRCS)
 
 # -------------
 -include $(DEPS)

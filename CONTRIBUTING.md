@@ -46,7 +46,8 @@ After that you will see a `.tgz` file at the root level of the project.
 To solve this you need to generate your `compile_commands.json` file. This file is particular for every maintainer so it is git ignored.
 
 ```sh
-bear -- make all test
+make clean
+bear -- make all all_tests
 ```
 
-For this you need to have [`bear`](https://github.com/rizsotto/Bear) installed.
+For this you need to have [`bear`](https://github.com/rizsotto/Bear) installed. You also need to have [`Criterion`](https://github.com/Snaipe/Criterion) installed because test files require it.
