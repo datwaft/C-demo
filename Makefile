@@ -24,9 +24,9 @@ TARGET := $(BUILD_DIR)/main
 # Source file variables
 # ---------------------
 TARGET_SRC := $(TARGET:$(BUILD_DIR)/%=$(SRC_DIR)/%.c)
-SRCS := $(filter-out $(TARGET_SRC), $(wildcard $(SRC_DIR)/*.c))
-HEADERS := $(wildcard $(HEADER_DIR)/*.h)
-TEST_SRCS := $(wildcard $(TEST_DIR)/*.c)
+SRCS := $(filter-out $(TARGET_SRC), $(shell find $(SRC_DIR) -name '*.c'))
+HEADERS := $(shell find $(HEADER_DIR) -name '*.h')
+TEST_SRCS := $(shell find $(TEST_DIR) -name '*.c')
 
 # -------------------
 # Byproduct variables
@@ -45,7 +45,7 @@ TEST_TARGETS := $(TEST_SRCS:$(TEST_DIR)/%.c=$(TEST_BUILD_DIR)/%)
 # ----------------------
 # Distribution variables
 # ----------------------
-DIST := Abreu-Chaves-Guevara-Ortiz-Yip.tgz
+DIST := Abreu-Guevara-Ortiz-Yip.tgz
 
 # ---------------------
 # Compilation variables
@@ -55,9 +55,10 @@ CFLAGS += -Wall -Wextra -Wpedantic \
 					-Wformat=2 -Wno-unused-parameter -Wshadow \
 					-Wwrite-strings -Wstrict-prototypes -Wold-style-definition \
 					-Wredundant-decls -Wnested-externs -Wmissing-include-dirs
-CFLAGS += -std=c11
+CFLAGS += -std=gnu11
 CPPFLAGS += -I$(HEADER_DIR) -MMD -MP
 LDLIBS += -lm
+LDFLAGS +=
 
 # =================
 # Compilation rules
@@ -69,36 +70,33 @@ all_tests: $(TEST_TARGETS)
 .PHONY: dist
 dist: $(DIST)
 
-$(TARGET): $(TARGET_OBJ) $(OBJS) | $(BUILD_DIR)
+$(TARGET): $(TARGET_OBJ) $(OBJS)
+	@mkdir -p $(@D)
 	$(CC) $(CFLAGS) $(LDFLAGS) $(LDLIBS) $^ -o $@
 
 $(TEST_BUILD_DIR)/%: LDLIBS += -lcriterion
-$(TEST_BUILD_DIR)/%: $(TEST_DIR)/%.c $(OBJS) | $(TEST_BUILD_DIR)
+$(TEST_BUILD_DIR)/%: $(TEST_DIR)/%.c $(OBJS)
+	@mkdir -p $(@D)
 	$(CC) $(CFLAGS) $(CPPFLAGS) $(LDFLAGS) $(LDLIBS) $^ -o $@
 
-$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c | $(OBJ_DIR)
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
+	@mkdir -p $(@D)
 	$(CC) $(CFLAGS) $(CPPFLAGS) -c $< -o $@
 
 # =================
 # Distribution rule
 # =================
-$(DIST): $(TARGET_SRC) $(SRCS) $(HEADERS) $(TEST_SRCS) $(MAKEFILE) $(DOCUMENTATION)
-	tar -zcvf $@ $^
+$(DIST): $(SRC_DIR) $(HEADER_DIR) $(RESOURCE_INDEX) $(RESOURCES_DIR) $(TEST_DIR) $(MAKEFILE) $(DOCUMENTATION)
+	mkdir $(basename $@)
+	cp -r $^ $(basename $@)
+	tar -zcvf $@ $(basename $@)
+	rm -r $(basename $@)
 
-# =====================
-# Folder creation rules
-# =====================
-$(BUILD_DIR):
-	mkdir $@
-
-$(OBJ_DIR): | $(BUILD_DIR)
-	mkdir $@
-
-$(DEPS_DIR): | $(BUILD_DIR)
-	mkdir $@
-
-$(TEST_BUILD_DIR): | $(BUILD_DIR)
-	mkdir $@
+# ========================
+# Directory creation rules
+# ========================
+$(SRC_DIR) $(HEADER_DIR) $(RESOURCES_DIR) $(TEST_DIR):
+	mkdir -p $@
 
 # ========================
 # Pseudo-target definition
