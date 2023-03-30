@@ -123,5 +123,9 @@ run-hooks:
 lint:
 	clang-tidy $(TARGET_SRC) $(SRCS) $(HEADERS) $(TEST_SRCS)
 
+.PHONY: format
+format: $(TARGET_SRC) $(SRCS) $(HEADERS) $(TEST_SRCS)
+	for file in $^; do clang-format -i $$file; done
+
 # -------------
 -include $(DEPS)
