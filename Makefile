@@ -81,11 +81,14 @@ $(TEST_BUILD_DIR)/%: LDLIBS += -lcriterion
 $(TEST_BUILD_DIR)/%: $(TEST_OBJ_DIR)/%.o $(OBJS) | $(TEST_BUILD_DIR)
 	$(CC) $(CFLAGS) $(LDFLAGS) $(LDLIBS) $^ -o $@
 
-$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c | $(OBJ_DIR)
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c $(OBJ_DIR)/%.d | $(OBJ_DIR)
 	$(CC) $(CFLAGS) $(CPPFLAGS) -c $< -o $@
 
-$(TEST_OBJ_DIR)/%.o: $(TEST_DIR)/%.c | $(TEST_OBJ_DIR)
+$(TEST_OBJ_DIR)/%.o: $(TEST_DIR)/%.c $(TEST_OBJ_DIR)/%.d | $(TEST_OBJ_DIR)
 	$(CC) $(CFLAGS) $(CPPFLAGS) -c $< -o $@
+
+# See https://make.mad-scientist.net/papers/advanced-auto-dependency-generation/
+$(DEPS):
 
 # =================
 # Distribution rule
