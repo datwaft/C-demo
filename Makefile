@@ -32,12 +32,12 @@ TEST_SRCS := $(shell find $(TEST_DIR) -name '*.c')
 # -------------------
 # Byproduct variables
 # -------------------
-TARGET_OBJ := $(TARGET:$(BUILD_DIR)/%=$(OBJ_DIR)/%.o)
+TARGET_OBJS := $(TARGET:$(BUILD_DIR)/%=$(OBJ_DIR)/%.o)
 OBJS := $(SRCS:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 TEST_OBJS := $(TEST_SRCS:$(TEST_DIR)/%.c=$(TEST_OBJ_DIR)/%.o)
 DEPS := $(OBJS:.o=.d) $(TEST_SRCS:$(TEST_DIR)/%.c=$(TEST_BUILD_DIR)/%.d)
 
-.SECONDARY: $(OBJS) $(TEST_OBJS) $(TARGET_OBJ) $(DEPS)
+.SECONDARY: $(OBJS) $(TEST_OBJS) $(TARGET_OBJS) $(DEPS)
 
 # --------------
 # Test variables
@@ -74,7 +74,7 @@ all_tests: $(TEST_TARGET)
 .PHONY: dist
 dist: $(DIST)
 
-$(TARGET): $(TARGET_OBJ) $(OBJS) | $(BUILD_DIR)
+$(TARGET): $(TARGET_OBJS) $(OBJS) | $(BUILD_DIR)
 	$(CC) $(CFLAGS) $(LDFLAGS) $(LDLIBS) $^ -o $@
 
 $(TEST_BUILD_DIR)/%: LDLIBS += -lcriterion
