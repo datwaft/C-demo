@@ -14,6 +14,7 @@ TEST_DIR := tests
 BUILD_DIR := build
 OBJ_DIR := $(BUILD_DIR)/obj
 TEST_BUILD_DIR := $(BUILD_DIR)/tests
+TEST_OBJ_DIR := $(TEST_BUILD_DIR)/obj
 
 # ---------------
 # Target variable
@@ -33,9 +34,10 @@ TEST_SRCS := $(shell find $(TEST_DIR) -name '*.c')
 # -------------------
 TARGET_OBJ := $(TARGET:$(BUILD_DIR)/%=$(OBJ_DIR)/%.o)
 OBJS := $(SRCS:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
+TEST_OBJS := $(TEST_SRCS:$(TEST_DIR)/%.c=$(TEST_OBJ_DIR)/%.o)
 DEPS := $(OBJS:.o=.d) $(TEST_SRCS:$(TEST_DIR)/%.c=$(TEST_BUILD_DIR)/%.d)
 
-.SECONDARY: $(OBJS) $(TARGET_OBJ) $(DEPS)
+.SECONDARY: $(OBJS) $(TEST_OBJS) $(TARGET_OBJ) $(DEPS)
 
 # --------------
 # Test variables
@@ -63,8 +65,10 @@ LDFLAGS +=
 # =================
 # Compilation rules
 # =================
-.PHONY: all all_tests
+.PHONY: all
 all: $(TARGET)
+
+.PHONY: all_tests
 all_tests: $(TEST_TARGET)
 
 .PHONY: dist
@@ -74,10 +78,13 @@ $(TARGET): $(TARGET_OBJ) $(OBJS) | $(BUILD_DIR)
 	$(CC) $(CFLAGS) $(LDFLAGS) $(LDLIBS) $^ -o $@
 
 $(TEST_BUILD_DIR)/%: LDLIBS += -lcriterion
-$(TEST_BUILD_DIR)/%: $(TEST_DIR)/%.c $(OBJS) | $(TEST_BUILD_DIR)
-	$(CC) $(CFLAGS) $(CPPFLAGS) $(LDFLAGS) $(LDLIBS) $^ -o $@
+$(TEST_BUILD_DIR)/%: $(TEST_OBJ_DIR)/%.o $(OBJS) | $(TEST_BUILD_DIR)
+	$(CC) $(CFLAGS) $(LDFLAGS) $(LDLIBS) $^ -o $@
 
-$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c | $(OBJ_DIR) $(DEP_DIR)
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c | $(OBJ_DIR)
+	$(CC) $(CFLAGS) $(CPPFLAGS) -c $< -o $@
+
+$(TEST_OBJ_DIR)/%.o: $(TEST_DIR)/%.c | $(TEST_OBJ_DIR)
 	$(CC) $(CFLAGS) $(CPPFLAGS) -c $< -o $@
 
 # =================
@@ -92,7 +99,7 @@ $(DIST): $(SRC_DIR) $(HEADER_DIR) $(TEST_DIR) $(MAKEFILE) $(DOCUMENTATION)
 # ========================
 # Directory creation rules
 # ========================
-$(SRC_DIR) $(HEADER_DIR) $(TEST_DIR) $(BUILD_DIR) $(OBJ_DIR) $(DEP_DIR) $(TEST_BUILD_DIR):
+$(SRC_DIR) $(HEADER_DIR) $(TEST_DIR) $(BUILD_DIR) $(OBJ_DIR) $(DEP_DIR) $(TEST_BUILD_DIR) $(TEST_OBJ_DIR):
 	mkdir -p $@
 
 # ========================
