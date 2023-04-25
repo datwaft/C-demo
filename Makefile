@@ -70,23 +70,20 @@ all_tests: $(TEST_TARGETS)
 .PHONY: dist
 dist: $(DIST)
 
-$(TARGET): $(TARGET_OBJ) $(OBJS)
-	@mkdir -p $(@D)
+$(TARGET): $(TARGET_OBJ) $(OBJS) | $(BUILD_DIR)
 	$(CC) $(CFLAGS) $(LDFLAGS) $(LDLIBS) $^ -o $@
 
 $(TEST_BUILD_DIR)/%: LDLIBS += -lcriterion
-$(TEST_BUILD_DIR)/%: $(TEST_DIR)/%.c $(OBJS)
-	@mkdir -p $(@D)
+$(TEST_BUILD_DIR)/%: $(TEST_DIR)/%.c $(OBJS) | $(TEST_BUILD_DIR)
 	$(CC) $(CFLAGS) $(CPPFLAGS) $(LDFLAGS) $(LDLIBS) $^ -o $@
 
-$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
-	@mkdir -p $(@D)
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c | $(OBJ_DIR) $(DEP_DIR)
 	$(CC) $(CFLAGS) $(CPPFLAGS) -c $< -o $@
 
 # =================
 # Distribution rule
 # =================
-$(DIST): $(SRC_DIR) $(HEADER_DIR) $(RESOURCE_INDEX) $(RESOURCES_DIR) $(TEST_DIR) $(MAKEFILE) $(DOCUMENTATION)
+$(DIST): $(SRC_DIR) $(HEADER_DIR) $(TEST_DIR) $(MAKEFILE) $(DOCUMENTATION)
 	mkdir $(basename $@)
 	cp -r $^ $(basename $@)
 	tar -zcvf $@ $(basename $@)
@@ -95,7 +92,7 @@ $(DIST): $(SRC_DIR) $(HEADER_DIR) $(RESOURCE_INDEX) $(RESOURCES_DIR) $(TEST_DIR)
 # ========================
 # Directory creation rules
 # ========================
-$(SRC_DIR) $(HEADER_DIR) $(RESOURCES_DIR) $(TEST_DIR):
+$(SRC_DIR) $(HEADER_DIR) $(TEST_DIR) $(BUILD_DIR) $(OBJ_DIR) $(DEP_DIR) $(TEST_BUILD_DIR):
 	mkdir -p $@
 
 # ========================
@@ -128,4 +125,4 @@ format: $(TARGET_SRC) $(SRCS) $(HEADERS) $(TEST_SRCS)
 	for file in $^; do clang-format -i $$file; done
 
 # -------------
--include $(DEPS)
+-include $(wildcard $(DEPS))
