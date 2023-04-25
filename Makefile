@@ -35,7 +35,7 @@ TEST_SRCS := $(shell find $(TEST_DIR) -name '*.c' 2> /dev/null)
 TARGET_OBJS := $(TARGET:$(BUILD_DIR)/%=$(OBJ_DIR)/%.o)
 OBJS := $(SRCS:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 TEST_OBJS := $(TEST_SRCS:$(TEST_DIR)/%.c=$(TEST_OBJ_DIR)/%.o)
-DEPS := $(OBJS:.o=.d) $(TEST_SRCS:$(TEST_DIR)/%.c=$(TEST_BUILD_DIR)/%.d)
+DEPS := $(OBJS:.o=.d) $(TARGET_OBJS:.o=.d) $(TEST_OBJS:.o=.d)
 
 .SECONDARY: $(OBJS) $(TEST_OBJS) $(TARGET_OBJS) $(DEPS)
 
