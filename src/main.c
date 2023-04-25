@@ -1,6 +1,7 @@
-#include "foo.h"
 #include <stdio.h>
 #include <stdlib.h>
+
+#include "foo.h"
 
 int main(int argc, char **argv) {
   for (int c = 'A'; c < 'A' + 26; c++) {
@@ -20,5 +21,5 @@ int main(int argc, char **argv) {
   int x = foo(3);
   printf("%d\n", x);
 
-  exit(0);
+  return EXIT_SUCCESS;
 }

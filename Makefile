@@ -19,7 +19,7 @@ TEST_OBJ_DIR := $(TEST_BUILD_DIR)/obj
 # ---------------
 # Target variable
 # ---------------
-TARGET := $(BUILD_DIR)/main
+TARGET := $(BUILD_DIR)/main $(BUILD_DIR)/main2
 
 # ---------------------
 # Source file variables
@@ -74,7 +74,7 @@ all_tests: $(TEST_TARGET)
 .PHONY: dist
 dist: $(DIST)
 
-$(TARGET): $(TARGET_OBJS) $(OBJS) | $(BUILD_DIR)
+$(BUILD_DIR)/%: $(OBJ_DIR)/%.o $(OBJS) | $(BUILD_DIR)
 	$(CC) $(CFLAGS) $(LDFLAGS) $(LDLIBS) $^ -o $@
 
 $(TEST_BUILD_DIR)/%: LDLIBS += -lcriterion
