@@ -40,7 +40,7 @@ DEPS := $(OBJS:.o=.d) $(TEST_SRCS:$(TEST_DIR)/%.c=$(TEST_BUILD_DIR)/%.d)
 # --------------
 # Test variables
 # --------------
-TEST_TARGETS := $(TEST_SRCS:$(TEST_DIR)/%.c=$(TEST_BUILD_DIR)/%)
+TEST_TARGET := $(TEST_SRCS:$(TEST_DIR)/%.c=$(TEST_BUILD_DIR)/%)
 
 # ----------------------
 # Distribution variables
@@ -65,7 +65,7 @@ LDFLAGS +=
 # =================
 .PHONY: all all_tests
 all: $(TARGET)
-all_tests: $(TEST_TARGETS)
+all_tests: $(TEST_TARGET)
 
 .PHONY: dist
 dist: $(DIST)
@@ -99,7 +99,7 @@ $(SRC_DIR) $(HEADER_DIR) $(TEST_DIR) $(BUILD_DIR) $(OBJ_DIR) $(DEP_DIR) $(TEST_B
 # Pseudo-target definition
 # ========================
 .PHONY: test
-test: $(TEST_TARGETS)
+test: $(TEST_TARGET)
 	for test_file in $^; do ./$$test_file; done
 
 .PHONY: clean
