@@ -25,9 +25,9 @@ TARGET := $(BUILD_DIR)/main $(BUILD_DIR)/main2
 # Source file variables
 # ---------------------
 TARGET_SRC := $(TARGET:$(BUILD_DIR)/%=$(SRC_DIR)/%.c)
-SRCS := $(filter-out $(TARGET_SRC), $(shell find $(SRC_DIR) -name '*.c'))
-HEADERS := $(shell find $(HEADER_DIR) -name '*.h')
-TEST_SRCS := $(shell find $(TEST_DIR) -name '*.c')
+SRCS := $(filter-out $(TARGET_SRC), $(shell find $(SRC_DIR) -name '*.c' 2> /dev/null))
+HEADERS := $(shell find $(HEADER_DIR) -name '*.h' 2> /dev/null)
+TEST_SRCS := $(shell find $(TEST_DIR) -name '*.c' 2> /dev/null)
 
 # -------------------
 # Byproduct variables
